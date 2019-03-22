@@ -1,15 +1,224 @@
 <template>
     <div>
-        44
+        <Card :bordered="false" style="margin-bottom:12px;">
+            <Form ref="formInline"  :label-width="80">
+                <Row>
+                    <Col span='4'>
+                        <FormItem label="公司名称">
+                            <Input type="text" v-model="com.name" placeholder="公司名称"></Input>
+                        </FormItem>
+                    </Col>
+                    <Col span='4'>
+                        <FormItem label="公司地址">
+                            <Input type="text" v-model="com.address" placeholder="公司地址"></Input>
+                        </FormItem>
+                    </Col>
+                    <Col span='2'>
+                        <FormItem label="公司规模">
+                            <Input type="text" v-model="com.scale" placeholder="公司规模"></Input>
+                        </FormItem>
+                    </Col>
+                    <Col span='3'>
+                        <FormItem label="薪资">
+                            <Input type="text" v-model="com.salary" placeholder="薪资"></Input>
+                        </FormItem>
+                    </Col>
+                    <Col span='5'>
+                        <FormItem label="要求">
+                            <Input type="textarea" v-model="com.requirement" placeholder="要求"></Input>
+                        </FormItem>
+                    </Col>
+                    <Col span='3'>
+                        <FormItem label="标签">
+                            <Input type="text" v-model="com.tags" placeholder="标签"></Input>
+                        </FormItem>
+                    </Col>
+                    <Col span='1'>
+                        <Button type="primary" @click="addCom">添加</Button>
+                    </Col>
+                    <Col span='1'>
+                        <div class="up-down" @click="up">
+                            <Icon type="md-arrow-round-up" />
+                        </div>
+                    </Col>
+                    <Col span='1'>
+                        <div class="up-down" @click="down">
+                            <Icon type="md-arrow-round-down" />
+                        </div>
+                    </Col>
+                </Row>
+            </Form>
+        </Card>
+        <Card>
+            <Table :columns="columns" :data="data1" :height='tableH' border stripe highlight-row @on-current-change='nothing' @on-row-click='selectRow'></Table>
+        </Card>
     </div>
 </template>
 
 <script>
     export default {
-        
+        data(){
+            return{
+                tableH : 200,
+                activeRowIndex : null,
+                com : {
+                    name : '',
+                    address : '',
+                    scale : '',
+                    salary : '',
+                    requirement : '',
+                    tags : ''
+                },
+                columns: [
+                    {
+                        title: '公司名称',
+                        align : 'center',
+                        key: 'name'
+                    },
+                    {
+                        title: '公司地址',
+                        align : 'center',
+                        key: 'address'
+                    },
+                    {
+                        title: '公司规模',
+                        align : 'center',
+                        key: 'scale'
+                    },
+                    {
+                        title: '薪资',
+                        align : 'center',
+                        key: 'salary'
+                    },
+                    {
+                        title: '要求',
+                        align : 'center',
+                        key: 'requirement'
+                    },
+                    {
+                        title: '标签',
+                        align : 'center',
+                        key: 'tags'
+                    },
+                    {
+                        title: '操作',
+                        align : 'center',
+                        key: 'do',
+                        render: (h, params) => {
+                            return h('div', [
+                                // h('Button', {
+                                //     props: {
+                                //         type: 'primary',
+                                //         size: 'small'
+                                //     },
+                                //     style: {
+                                //         marginRight: '5px'
+                                //     },
+                                //     on: {
+                                //         click: () => {
+                                //             this.eidt(params.index)
+                                //         }
+                                //     }
+                                // }, '编辑'),
+                                h('Button', {
+                                    props: {
+                                        type: 'error',
+                                        size: 'small'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.remove(params.index)
+                                        }
+                                    }
+                                }, '删除')
+                            ]);
+                        }
+                    }
+                ],
+                data1: []
+            }
+        },
+        methods : {
+            nothing(){},
+            up(){
+                if (this.activeRowIndex) {
+                    let activeItem = this.data1.splice(this.activeRowIndex,1)
+                    this.data1.splice(this.activeRowIndex -1,0,activeItem[0])
+                    this.activeRowIndex--
+                    this.saveData()
+                }
+            },
+            down(){
+                if (this.activeRowIndex < this.data1.length -1) {
+                    let activeItem = this.data1.splice(this.activeRowIndex,1)
+                    this.data1.splice(this.activeRowIndex +1,0,activeItem[0])
+                    this.activeRowIndex++
+                    this.saveData()
+                }
+            },
+            selectRow(currentRow,index){
+                console.log(currentRow)
+                console.log(index)
+                this.activeRowIndex = index
+            },
+            // eidt(index){
+            //     this.com = this.data1[index]
+            // },
+            remove(index){
+                console.log('remove:'+index)
+                this.$Modal.warning({
+                    title: '警告',
+                    content: '是否确认删除：'+this.data1[index].name,
+                    onOk : () =>{
+                        this.data1.splice(index,1)
+                        this.saveData()
+                    }
+                });
+            },
+            saveData(){
+                window.localStorage.data1 = JSON.stringify(this.data1)
+            },
+            addCom(){
+                this.data1.push({
+                    ...this.com
+                })
+                this.saveData()
+                this.com = {
+                    name : '',
+                    address : '',
+                    scale : '',
+                    salary : '',
+                    requirement : '',
+                    tags : ''
+                }
+            }
+        },
+        mounted () {
+            this.$nextTick(() => {
+                    let h = document.documentElement.clientHeight || document.body.clientHeight
+                    this.tableH = h - 152;
+            });
+        },
+        created(){
+            if (window.localStorage.hasOwnProperty('data1')) {
+                this.data1 = JSON.parse(window.localStorage.data1)
+                console.log(window.localStorage.data1)
+            }
+        }
     }
 </script>
 
 <style scoped>
-
+    .up-down{
+        width: 50px;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 18px;
+        cursor: pointer;
+    }
+    .up-down:hover{
+        background-color: #f6f6f6;
+    }
 </style>
