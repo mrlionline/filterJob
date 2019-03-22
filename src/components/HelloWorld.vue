@@ -3,27 +3,27 @@
         <Card :bordered="false" style="margin-bottom:12px;">
             <Form ref="formInline"  :label-width="80">
                 <Row>
-                    <Col span='3'>
+                    <Col span='4'>
                         <FormItem label="公司名称">
                             <Input type="text" v-model="com.name" placeholder="公司名称"></Input>
                         </FormItem>
                     </Col>
-                    <Col span='3'>
+                    <Col span='4'>
                         <FormItem label="公司地址">
                             <Input type="text" v-model="com.address" placeholder="公司地址"></Input>
                         </FormItem>
                     </Col>
-                    <Col span='1'>
+                    <Col span='2'>
                         <FormItem label="公司规模">
                             <Input type="text" v-model="com.scale" placeholder="公司规模"></Input>
                         </FormItem>
                     </Col>
-                    <Col span='2'>
+                    <Col span='3'>
                         <FormItem label="薪资">
                             <Input type="text" v-model="com.salary" placeholder="薪资"></Input>
                         </FormItem>
                     </Col>
-                    <Col span='9'>
+                    <Col span='5'>
                         <FormItem label="要求">
                             <Input type="textarea" v-model="com.requirement" placeholder="要求"></Input>
                         </FormItem>
@@ -50,7 +50,7 @@
             </Form>
         </Card>
         <Card>
-            <Table :columns="columns" :data="data1" :height='tableH' border stripe highlight-row @on-current-change='nothing' @on-row-click='selectRow'></Table>
+            <Table :columns="columns" :data="data1" :height='tableH' border stripe highlight-row @on-current-change='nothing' @on-row-click='selectRow' :draggable='true' @on-drag-drop='drag'></Table>
         </Card>
     </div>
 </template>
@@ -83,17 +83,20 @@
                     {
                         title: '公司规模',
                         align : 'center',
+                        width : 150,
                         key: 'scale'
                     },
                     {
                         title: '薪资',
                         align : 'center',
+                        width : 150,
                         key: 'salary'
                     },
                     {
                         title: '要求',
                         align : 'center',
                         key: 'requirement',
+                        width : 700,
                         render : (h,p) =>{
                             return h('pre',{
                                 domProps : {
@@ -161,6 +164,12 @@
         },
         methods : {
             nothing(){},
+            drag(i1,i2){
+                let tem_item = this.data1[i1]
+                this.data1.splice(i1,1,this.data1[i2])
+                this.data1.splice(i2,1,tem_item)
+                this.saveData()
+            },
             up(){
                 if (this.activeRowIndex) {
                     let activeItem = this.data1.splice(this.activeRowIndex,1)
@@ -187,13 +196,14 @@
             // },
             remove(index){
                 console.log('remove:'+index)
-                this.$Modal.warning({
+                this.$Modal.confirm({
                     title: '警告',
                     content: '是否确认删除：'+this.data1[index].name,
-                    onOk : () =>{
+                    onOk: () => {
                         this.data1.splice(index,1)
                         this.saveData()
-                    }
+                    },
+                    onCancel: () => {}
                 });
             },
             saveData(){
