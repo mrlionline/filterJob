@@ -3,27 +3,27 @@
         <Card :bordered="false" style="margin-bottom:12px;">
             <Form ref="formInline"  :label-width="80">
                 <Row>
-                    <Col span='4'>
+                    <Col span='3'>
                         <FormItem label="公司名称">
                             <Input type="text" v-model="com.name" placeholder="公司名称"></Input>
                         </FormItem>
                     </Col>
-                    <Col span='4'>
+                    <Col span='3'>
                         <FormItem label="公司地址">
                             <Input type="text" v-model="com.address" placeholder="公司地址"></Input>
                         </FormItem>
                     </Col>
-                    <Col span='2'>
+                    <Col span='1'>
                         <FormItem label="公司规模">
                             <Input type="text" v-model="com.scale" placeholder="公司规模"></Input>
                         </FormItem>
                     </Col>
-                    <Col span='3'>
+                    <Col span='2'>
                         <FormItem label="薪资">
                             <Input type="text" v-model="com.salary" placeholder="薪资"></Input>
                         </FormItem>
                     </Col>
-                    <Col span='5'>
+                    <Col span='9'>
                         <FormItem label="要求">
                             <Input type="textarea" v-model="com.requirement" placeholder="要求"></Input>
                         </FormItem>
