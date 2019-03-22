@@ -93,12 +93,33 @@
                     {
                         title: '要求',
                         align : 'center',
-                        key: 'requirement'
+                        key: 'requirement',
+                        render : (h,p) =>{
+                            return h('pre',{
+                                domProps : {
+                                    innerHTML : p.row.requirement
+                                },
+                                style : {
+                                    'text-align' : 'left',
+                                    'word-break' : 'break-all',
+                                    'word-wrap' : 'wrap',
+                                    'white-space':'pre-wrap'
+                                }
+                            })
+                        }
                     },
                     {
                         title: '标签',
                         align : 'center',
-                        key: 'tags'
+                        key: 'tags',
+                        render : (h,p) =>{
+                            return h('div',
+                                Array.apply(null, p.row.tags.split(/[,，\s]/).map(function(item){
+                                        return h('Tag',item)
+                                    })
+                                )
+                            )
+                        }
                     },
                     {
                         title: '操作',
@@ -179,6 +200,7 @@
                 window.localStorage.data1 = JSON.stringify(this.data1)
             },
             addCom(){
+                console.log(this.com)
                 this.data1.push({
                     ...this.com
                 })
