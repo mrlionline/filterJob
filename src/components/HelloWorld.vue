@@ -3,14 +3,19 @@
         <Card :bordered="false" style="margin-bottom:12px;">
             <Form ref="formInline"  :label-width="80">
                 <Row>
-                    <Col span='4'>
+                    <Col span='3'>
                         <FormItem label="公司名称">
                             <Input type="text" v-model="com.name" placeholder="公司名称"></Input>
                         </FormItem>
                     </Col>
-                    <Col span='4'>
+                    <Col span='3'>
                         <FormItem label="公司地址">
                             <Input type="text" v-model="com.address" placeholder="公司地址"></Input>
+                        </FormItem>
+                    </Col>
+                    <Col span='2'>
+                        <FormItem label="距离">
+                            <Input type="text" v-model="com.distance" placeholder="距离"></Input>
                         </FormItem>
                     </Col>
                     <Col span='2'>
@@ -64,6 +69,7 @@
                 com : {
                     name : '',
                     address : '',
+                    distance : '',
                     scale : '',
                     salary : '',
                     requirement : '',
@@ -79,6 +85,12 @@
                         title: '公司地址',
                         align : 'center',
                         key: 'address'
+                    },
+                    {
+                        title: '距离',
+                        align : 'center',
+                        width : 100,
+                        key: 'distance'
                     },
                     {
                         title: '公司规模',
@@ -106,7 +118,9 @@
                                     'text-align' : 'left',
                                     'word-break' : 'break-all',
                                     'word-wrap' : 'wrap',
-                                    'white-space':'pre-wrap'
+                                    'white-space':'pre-wrap',
+                                    'padding-top' : '15px',
+                                    'padding-bottom' : '15px'
                                 }
                             })
                         }
@@ -127,6 +141,7 @@
                     {
                         title: '操作',
                         align : 'center',
+                        width : 100,
                         key: 'do',
                         render: (h, params) => {
                             return h('div', [
@@ -218,6 +233,7 @@
                 this.com = {
                     name : '',
                     address : '',
+                    distance : '',
                     scale : '',
                     salary : '',
                     requirement : '',
