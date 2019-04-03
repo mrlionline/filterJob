@@ -78,6 +78,11 @@
                 },
                 columns: [
                     {
+                        type: 'index',
+                        width: 60,
+                        align: 'center'
+                    },
+                    {
                         title: '公司名称',
                         align : 'center',
                         key: 'name'
