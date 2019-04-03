@@ -39,7 +39,7 @@
                         </FormItem>
                     </Col>
                     <Col span='1'>
-                        <Button type="primary" @click="addCom">添加</Button>
+                        <Button type="primary" @click="addCom">整</Button>
                     </Col>
                     <Col span='1'>
                         <div class="up-down" @click="up">
@@ -64,6 +64,7 @@
     export default {
         data(){
             return{
+                editIndex : -1,
                 tableH : 200,
                 activeRowIndex : null,
                 com : {
@@ -141,24 +142,24 @@
                     {
                         title: '操作',
                         align : 'center',
-                        width : 100,
+                        width : 150,
                         key: 'do',
                         render: (h, params) => {
                             return h('div', [
-                                // h('Button', {
-                                //     props: {
-                                //         type: 'primary',
-                                //         size: 'small'
-                                //     },
-                                //     style: {
-                                //         marginRight: '5px'
-                                //     },
-                                //     on: {
-                                //         click: () => {
-                                //             this.eidt(params.index)
-                                //         }
-                                //     }
-                                // }, '编辑'),
+                                h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        marginRight: '5px'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.eidt(params.index)
+                                        }
+                                    }
+                                }, '编辑'),
                                 h('Button', {
                                     props: {
                                         type: 'error',
@@ -206,9 +207,10 @@
                 console.log(index)
                 this.activeRowIndex = index
             },
-            // eidt(index){
-            //     this.com = this.data1[index]
-            // },
+            eidt(index){
+                this.editIndex = index
+                this.com = {...this.data1[index]}
+            },
             remove(index){
                 console.log('remove:'+index)
                 this.$Modal.confirm({
@@ -225,19 +227,34 @@
                 window.localStorage.data1 = JSON.stringify(this.data1)
             },
             addCom(){
-                console.log(this.com)
-                this.data1.push({
-                    ...this.com
-                })
-                this.saveData()
-                this.com = {
-                    name : '',
-                    address : '',
-                    distance : '',
-                    scale : '',
-                    salary : '',
-                    requirement : '',
-                    tags : ''
+                if (this.editIndex == -1) {
+                    console.log(this.com)
+                    this.data1.push({
+                        ...this.com
+                    })
+                    this.saveData()
+                    this.com = {
+                        name : '',
+                        address : '',
+                        distance : '',
+                        scale : '',
+                        salary : '',
+                        requirement : '',
+                        tags : ''
+                    }
+                }else{
+                    this.data1.splice(this.editIndex,1,this.com)
+                    this.saveData()
+                    this.com = {
+                        name : '',
+                        address : '',
+                        distance : '',
+                        scale : '',
+                        salary : '',
+                        requirement : '',
+                        tags : ''
+                    }
+                    this.editIndex = -1
                 }
             }
         },
